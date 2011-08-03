@@ -25,6 +25,10 @@ List* list_prepend(List* list, void* data) {
 Array string_split(char* str, char* sep) {
   Array ary;
 
+  if (NULL == str) {
+    return ary;
+  }
+
   const char* remainder = str;
   char* s = strstr(remainder, sep);
   int sep_length = strlen(sep);

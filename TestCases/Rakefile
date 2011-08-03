@@ -26,17 +26,23 @@ end
 
 def build_and_run source
   compile = "gcc #{source} #{CCAT_SOURCES} #{CCAT_INCLUDE} -o #{source.execution_name}"
+  #puts compile
   compile_in, compile_out, compile_err = Open3.popen3(compile)
+  #puts compile_out.read
   compile_err_data = compile_err.read
-  compile_in.close
-  compile_out.close
-  compile_err.close
   stdin, stdout, stderr = Open3.popen3("./#{source.execution_name}")
   stdout_data = stdout.read
   stderr_data = stderr.read
   stdin.close
   stdout.close
   stderr.close
+  compile_in.close
+  compile_out.close
+  compile_err.close
+  if stdout_data.empty?
+    stdout_data = "#{source} : Segmentation fault"
+    stderr_data = LF
+  end
   [stdout_data, stderr_data, compile_err_data]
 end
 
@@ -91,7 +97,6 @@ ALL_SOURCES.each do |source|
   task source do
     stdout, stderr, compile_err = build_and_run(source)
     puts stdout
-    #puts stderr if not stderr.empty?
   end
 end
 

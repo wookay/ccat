@@ -11,6 +11,19 @@ void test_string_split() {
   assert_true(string_equal("b", ary.elements[1].data));
   assert_true(string_equal("c", ary.elements[2].data));
   array_release(ary);
+
+  ary = string_split("", SPACE);
+  assert_true(0 == ary.count);
+  array_release(ary);
+
+  ary = string_split(NULL, SPACE);
+  assert_true(0 == ary.count);
+  array_release(ary);
+
+  ary = string_split(NULL, NULL);
+  assert_true(0 == ary.count);
+  assert_true(0 == ary.count);
+  array_release(ary);
 }
 
 void test_chars() {
