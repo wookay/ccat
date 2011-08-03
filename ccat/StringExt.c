@@ -58,10 +58,13 @@ Array string_split(char* str, char* sep) {
       if (NULL == l->next) {
         break;
       } else {
+        List* current = l;
         l = l->next;
+        memory_free(current);
       }
       cnt -= 1;
     }
+    memory_free(l);
   }
   ary.elements = elements;
   return ary;
