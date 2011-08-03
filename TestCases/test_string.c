@@ -16,6 +16,20 @@ void test_string_split() {
   assert_true(0 == ary.count);
   array_release(ary);
 
+  ary = string_split("hello", SPACE);
+  assert_true(1 == ary.count);
+  assert_true(string_equal("hello", ary.elements[0].data));
+  array_release(ary);
+
+  ary = string_split("hello", "");
+  assert_true(5 == ary.count);
+  assert_true(string_equal("h", ary.elements[0].data));
+  assert_true(string_equal("e", ary.elements[1].data));
+  assert_true(string_equal("l", ary.elements[2].data));
+  assert_true(string_equal("l", ary.elements[3].data));
+  assert_true(string_equal("o", ary.elements[4].data));
+  array_release(ary);
+
   ary = string_split(NULL, SPACE);
   assert_true(0 == ary.count);
   array_release(ary);

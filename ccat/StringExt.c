@@ -30,6 +30,22 @@ Array string_split(char* str, char* sep) {
   }
 
   const char* remainder = str;
+  if (0 == strlen(sep)) {
+    int cnt = strlen(str);
+    ary.count = cnt;
+    Element* elements = memory_alloc(sizeof(Element) * cnt);
+    int idx;
+    for (idx = 0; idx < cnt; idx++) {
+      remainder = str + idx;
+      char* buf = memory_alloc(1 + 1);
+      memcpy(buf, remainder, 1);
+      buf[1] = NULL_CHAR;
+      elements[idx].data = buf;
+    }
+    ary.elements = elements;
+    return ary;
+  }
+
   char* s = strstr(remainder, sep);
   int sep_length = strlen(sep);
   int cnt = 0;
