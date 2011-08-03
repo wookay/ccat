@@ -2,7 +2,8 @@
 //                           wookay.noh at gmail.com
 
 #include "UnitTest.h"
-#include "TypeExt.h"
+
+#define true 1
 
 void add_passed_count() {
   report.passed += 1;

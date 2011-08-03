@@ -1,0 +1,100 @@
+# Rakefile
+#                           wookay.noh at gmail.com
+
+require 'open3'
+
+#CCAT_SOURCES = "../ccat/UnitTest.c"
+CCAT_SOURCES = "../ccat/UnitTest.c ../ccat/Content.c ../ccat/StringExt.c ../ccat/ArrayExt.c"
+CCAT_INCLUDE = "-I../ccat"
+
+ALL_SOURCES = Dir['*.c']
+
+class String
+  def execution_name
+    self.gsub('.c','.out')
+  end
+end
+
+LF = "\n"
+
+desc 'clean up execution files'
+task :clean do
+  ALL_SOURCES.each do |source|
+    `rm -f ./#{source.execution_name}`
+  end 
+end
+
+def build_and_run source
+  compile = "gcc #{source} #{CCAT_SOURCES} #{CCAT_INCLUDE} -o #{source.execution_name}"
+  compile_in, compile_out, compile_err = Open3.popen3(compile)
+  compile_err_data = compile_err.read
+  compile_in.close
+  compile_out.close
+  compile_err.close
+  stdin, stdout, stderr = Open3.popen3("./#{source.execution_name}")
+  stdout_data = stdout.read
+  stderr_data = stderr.read
+  stdin.close
+  stdout.close
+  stderr.close
+  [stdout_data, stderr_data, compile_err_data]
+end
+
+
+desc "run all tests and clean up"
+task :a do
+  run_all_tests
+  `rake clean`
+end
+
+desc "run all tests"
+task :all do
+  run_all_tests
+end
+
+def run_all_tests
+  puts 'Started'
+  report = {
+    :tests => 0,
+    :passed => 0,
+    :failed => 0,
+    :errors => 0,
+  }
+  test_result_pat = /^(\d*) tests, (\d*) assertions, (\d*) failures, (\d*) errors/
+  ALL_SOURCES.each do |source|
+    stdout, stderr, compile_err = build_and_run source
+    if not compile_err.empty?
+      puts "\n#{source} COMPILE ERROR\n#{compile_err}\n"
+    end
+    report[:errors] += 1 if not stderr.empty?
+    stdout.split(LF).each do |line|
+      case line
+      when /^Started/
+      when /^Finished in/
+      when test_result_pat
+        m = test_result_pat.match line
+        report[:tests] += m[1].to_i
+        report[:passed] += m[2].to_i
+        report[:failed] += m[3].to_i
+        report[:errors] += m[4].to_i
+      else
+        puts line
+      end
+    end
+  end
+  puts "%d tests, %d assertions, %d failures, %d errors" %
+    [report[:tests], report[:passed], report[:failed], report[:errors]]
+end
+
+ALL_SOURCES.each do |source|
+  desc "build and run " + source
+  task source do
+    stdout, stderr, compile_err = build_and_run(source)
+    puts stdout
+    #puts stderr if not stderr.empty?
+  end
+end
+
+task :default do
+  puts `rake -T --silent`
+end

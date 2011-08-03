@@ -11,7 +11,7 @@ void test_numbers() {
 void test_strings() {
   assert_true(string_equal("abc", "abc")); 
   assert_true(string_equal("abcdef", "abcdef")); 
-  assert_true(string_equal("abcdef", "abcdefg")); 
+  assert_true(string_equal("abcdefg", "abcdefg")); 
 }
 
 int main() {
@@ -23,4 +23,5 @@ int main() {
 
   unittest_report();
 
+  return 0;
 }

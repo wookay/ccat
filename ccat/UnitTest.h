@@ -8,6 +8,7 @@
 void add_passed_count() ;
 void add_failed_count() ;
 
+
 #define assert_true(e)  \
   ((void) ((e) ? _got_passed(#e) : _raise_error(#e, __FILE__, __LINE__)))
 #define _got_passed(e) \
@@ -16,11 +17,10 @@ void add_failed_count() ;
   ((void) printf("\nAssertion failed in %s:%u\n  %s\n", file, line, e), add_failed_count())
 
 void unittest_setup() ;
-#define unittest_run(fun) _unittest_run(&fun)
 void _unittest_run(void (*fun)()) ;
 void unittest_report() ;
 
-
+#define unittest_run(fun) _unittest_run(&fun)
 
 // global structs
 struct Report {
