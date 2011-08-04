@@ -11,23 +11,19 @@ Path path_for_current_directory_file(char* name) {
   return path;
 }
 
-Content content_for_current_directory_file(char* name) {
+String string_for_current_directory_file(char* name) {
   Path path = path_for_current_directory_file(name);
-  return content_for_path(path);
+  return string_for_path(path);
 }
 
-void content_release(Content content) {
-  memory_free(content.data);
-}
-
-Content content_for_path(Path path) {
-  Content content;
+String string_for_path(Path path) {
+  String string;
   int fd = open(path.full_path, O_RDONLY);
   if (0 > fd) {
   } else {
     struct stat stat_buf;
     if (0 > fstat(fd, &stat_buf)) {
-      goto content_for_path_error;
+      goto string_for_path_error;
     } else {
       if (0 < stat_buf.st_size && S_ISREG (stat_buf.st_mode)) {
         int file_size = stat_buf.st_size;
@@ -37,7 +33,7 @@ Content content_for_path(Path path) {
           int rc = read (fd, buf + bytes_read, file_size - bytes_read);
           if (0 > rc) {
             memory_free(buf);
-            goto content_for_path_error;
+            goto string_for_path_error;
           } else if (0 == rc) {
             break;
           } else {
@@ -46,14 +42,14 @@ Content content_for_path(Path path) {
         }
         buf[bytes_read] = NULL_CHAR;
         close(fd);
-        content.length = bytes_read;
-        content.data = buf;
+        string.length = bytes_read;
+        string.chars = buf;
       }
     }
   }
-  return content;
+  return string;
 
-content_for_path_error:
+string_for_path_error:
   close(fd);
-  return content;
+  return string;
 }

@@ -5,11 +5,10 @@
 #include "Content.h"
 
 void test_content() {
-  Content content = content_for_current_directory_file(__FILE__); 
-  //printf("content %d", content.length);
-  assert_true(413 == content.length);
-
-  content_release(content);
+  String str = string_for_current_directory_file(__FILE__); 
+  //printf("str length: %d", str.length);
+  assert_true(397 == str.length);
+  string_release(str);
 }
 
 int main() {
