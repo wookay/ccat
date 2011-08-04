@@ -3,6 +3,27 @@
 
 #include "ccat.h"
 
+void test_string_concat() {
+  char* a = "a";
+  char* b = "b";
+  String str = string_concat(a, b);
+  assert_true(2 == str.length);
+  assert_true(string_equal("ab", str.chars));
+  string_release(str);
+
+  str = string_concat("", "");
+  assert_true(0 == str.length);
+  assert_true(string_equal("", str.chars));
+  string_release(str);
+}
+
+void test_empty_string() {
+  String str = empty_string();
+  assert_true(0 == str.length);
+  assert_true(string_equal("", str.chars));
+  string_release(str);
+}
+
 void test_string_split() {
   char* str = "a b c";
   Array ary = string_split(str, SPACE);
@@ -57,6 +78,8 @@ void test_chars() {
 
 int main() {
   unittest_setup();
+  unittest_run(test_string_concat);
+  unittest_run(test_empty_string);
   unittest_run(test_string_split);
   unittest_run(test_chars);
   unittest_report();

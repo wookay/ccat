@@ -21,6 +21,32 @@ List* list_prepend(List* list, void* data) {
   return node;
 }
 
+String empty_string() {
+  String str;
+  str.length = 0;
+  char* empty_str = memory_alloc(1 + 1);
+  strcpy(empty_str, "");
+  str.chars = empty_str;
+  return str;
+}
+
+String string_concat(char* a, char* b) {
+  size_t a_length = strlen(a);
+  size_t b_length = strlen(b);
+  char* concat_str = memory_alloc(a_length + b_length + 1);
+  strcpy(concat_str, a);
+  strcpy(concat_str + a_length, b);
+  String str;
+  str.length = strlen(concat_str);
+  str.chars = concat_str;
+  return str;
+}
+
+
+void string_release(String str) {
+  memory_free(str.chars);
+}
+
 // glib g_strsplit
 Array string_split(char* str, char* sep) {
   Array ary;

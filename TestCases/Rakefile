@@ -39,7 +39,8 @@ def build_and_run source
   compile_in.close
   compile_out.close
   compile_err.close
-  if stdout_data.empty?
+  test_result_pat = /^(\d*) tests, (\d*) assertions, (\d*) failures, (\d*) errors/
+  if not test_result_pat.match stdout_data
     stdout_data = "#{source} : Segmentation fault"
     stderr_data = LF
   end

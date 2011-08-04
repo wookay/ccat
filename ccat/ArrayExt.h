@@ -1,15 +1,5 @@
-#ifndef __ARRAY_H__
-#define __ARRAY_H__
+#include "TypeExt.h"
 
-typedef struct Element {
-  void* data;
-} Element;
-
-typedef struct Array {
-  int count;
-  Element* elements;
-} Array;
-
+Array empty_array() ;
+String array_join(Array ary, char* sep) ;
 void array_release(Array ary) ;
-
-#endif
