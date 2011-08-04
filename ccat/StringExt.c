@@ -30,6 +30,17 @@ String empty_string() {
   return str;
 }
 
+
+int string_equal(char* a, char* b) {
+  if (NULL == a) {
+    return NULL == b;
+  } else if (NULL == b) {
+    return NULL == a;
+  } else {
+    return 0 == strcmp(a,b);
+  }
+}
+
 String string_concat(char* a, char* b) {
   size_t a_length = strlen(a);
   size_t b_length = strlen(b);

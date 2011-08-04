@@ -12,6 +12,6 @@ typedef struct Content {
 } Content;
 
 Path path_for_current_directory_file(char* name) ;
-Content load_content_for_current_directory_file(char* name) ;
-Content load_content_for_path(Path path) ;
+Content content_for_current_directory_file(char* name) ;
+Content content_for_path(Path path) ;
 void content_release(Content content) ;

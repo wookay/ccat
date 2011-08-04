@@ -11,23 +11,23 @@ Path path_for_current_directory_file(char* name) {
   return path;
 }
 
-Content load_content_for_current_directory_file(char* name) {
+Content content_for_current_directory_file(char* name) {
   Path path = path_for_current_directory_file(name);
-  return load_content_for_path(path);
+  return content_for_path(path);
 }
 
 void content_release(Content content) {
   memory_free(content.data);
 }
 
-Content load_content_for_path(Path path) {
+Content content_for_path(Path path) {
   Content content;
   int fd = open(path.full_path, O_RDONLY);
   if (0 > fd) {
   } else {
     struct stat stat_buf;
     if (0 > fstat(fd, &stat_buf)) {
-      goto load_content_for_path_error;
+      goto content_for_path_error;
     } else {
       if (0 < stat_buf.st_size && S_ISREG (stat_buf.st_mode)) {
         int file_size = stat_buf.st_size;
@@ -37,7 +37,7 @@ Content load_content_for_path(Path path) {
           int rc = read (fd, buf + bytes_read, file_size - bytes_read);
           if (0 > rc) {
             memory_free(buf);
-            goto load_content_for_path_error;
+            goto content_for_path_error;
           } else if (0 == rc) {
             break;
           } else {
@@ -53,7 +53,7 @@ Content load_content_for_path(Path path) {
   }
   return content;
 
-load_content_for_path_error:
+content_for_path_error:
   close(fd);
   return content;
 }

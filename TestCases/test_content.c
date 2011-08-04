@@ -5,9 +5,9 @@
 #include "Content.h"
 
 void test_content() {
-  Content content = load_content_for_current_directory_file(__FILE__); 
+  Content content = content_for_current_directory_file(__FILE__); 
   //printf("content %d", content.length);
-  assert_true(418 == content.length);
+  assert_true(413 == content.length);
 
   content_release(content);
 }

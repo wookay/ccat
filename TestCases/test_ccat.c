@@ -9,9 +9,12 @@ void test_numbers() {
 }
 
 void test_strings() {
+  assert_true(string_equal(NULL, NULL));
+  assert_false(string_equal(NULL, ""));
+  assert_false(string_equal("", NULL));
+  assert_true(string_equal("", "")); 
   assert_true(string_equal("abc", "abc")); 
   assert_true(string_equal("abcdef", "abcdef")); 
-  assert_true(string_equal("abcdefg", "abcdefg")); 
 }
 
 int main() {
